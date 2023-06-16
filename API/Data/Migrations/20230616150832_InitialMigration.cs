@@ -15,7 +15,7 @@ namespace API.Data.Migrations
                 name: "CommunityProjects",
                 columns: table => new
                 {
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                    CommunityProjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -28,7 +28,7 @@ namespace API.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommunityProjects", x => x.ProjectId);
+                    table.PrimaryKey("PK_CommunityProjects", x => x.CommunityProjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,7 +54,9 @@ namespace API.Data.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
@@ -67,8 +69,8 @@ namespace API.Data.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Products_Customers_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_Products_Customers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Cascade);
@@ -78,10 +80,10 @@ namespace API.Data.Migrations
                 name: "SponsorshipPlans",
                 columns: table => new
                 {
-                    PlanId = table.Column<int>(type: "int", nullable: false)
+                    SponsorshipPlanId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    CommunityProjectId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     SourceOfFunds = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -92,13 +94,13 @@ namespace API.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SponsorshipPlans", x => x.PlanId);
+                    table.PrimaryKey("PK_SponsorshipPlans", x => x.SponsorshipPlanId);
                     table.ForeignKey(
-                        name: "FK_SponsorshipPlans_CommunityProjects_ProjectId",
-                        column: x => x.ProjectId,
+                        name: "FK_SponsorshipPlans_CommunityProjects_CommunityProjectId",
+                        column: x => x.CommunityProjectId,
                         principalTable: "CommunityProjects",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CommunityProjectId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SponsorshipPlans_Customers_CustomerId",
                         column: x => x.CustomerId,
@@ -110,16 +112,16 @@ namespace API.Data.Migrations
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SponsorshipPayments",
                 columns: table => new
                 {
-                    PaymentId = table.Column<int>(type: "int", nullable: false)
+                    SponsorshipPaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlanId = table.Column<int>(type: "int", nullable: false),
+                    SponsorshipPlanId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -127,19 +129,29 @@ namespace API.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SponsorshipPayments", x => x.PaymentId);
+                    table.PrimaryKey("PK_SponsorshipPayments", x => x.SponsorshipPaymentId);
                     table.ForeignKey(
-                        name: "FK_SponsorshipPayments_SponsorshipPlans_PlanId",
-                        column: x => x.PlanId,
+                        name: "FK_SponsorshipPayments_SponsorshipPlans_SponsorshipPlanId",
+                        column: x => x.SponsorshipPlanId,
                         principalTable: "SponsorshipPlans",
-                        principalColumn: "PlanId",
+                        principalColumn: "SponsorshipPlanId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SponsorshipPayments_PlanId",
+                name: "IX_Products_CustomerId",
+                table: "Products",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SponsorshipPayments_SponsorshipPlanId",
                 table: "SponsorshipPayments",
-                column: "PlanId");
+                column: "SponsorshipPlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SponsorshipPlans_CommunityProjectId",
+                table: "SponsorshipPlans",
+                column: "CommunityProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SponsorshipPlans_CustomerId",
@@ -150,11 +162,6 @@ namespace API.Data.Migrations
                 name: "IX_SponsorshipPlans_ProductId",
                 table: "SponsorshipPlans",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SponsorshipPlans_ProjectId",
-                table: "SponsorshipPlans",
-                column: "ProjectId");
         }
 
         /// <inheritdoc />

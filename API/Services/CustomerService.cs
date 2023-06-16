@@ -55,7 +55,6 @@ namespace API.Services
                 responseDto.Message = "Customer Does Not Exist";
                 return responseDto;
             }
-
             if (customerResponse.CustomerEmailAddress.Trim() != customerRequestDto.CustomerEmailAddress.Trim())
             {
                 if (_customerRepository.CustomerExists(customerRequestDto.CustomerEmailAddress.Trim()))
@@ -66,9 +65,7 @@ namespace API.Services
                     return responseDto;
                 }
             }
-
             var customer = new Customer();
-
             _mapper.Map(customerRequestDto, customer);
             customer.DateAdded = customerResponse.DateAdded;
             if (await _customerRepository.UpdateCustomerAsync(customer))
@@ -78,7 +75,6 @@ namespace API.Services
                 responseDto.Message = "Customer edited successfully";
                 return responseDto;
             }
-
             responseDto = new ResponseDto();
             responseDto.IsSuccess = false;
             responseDto.Message = "Failed to edit Customer";

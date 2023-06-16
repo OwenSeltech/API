@@ -11,7 +11,5 @@
         public bool IsDeleted { get; set; } = false;
         public DateTime? DateDeleted { get; set; }
 
-        public List<Product> Products { get; set; }
-        public List<SponsorshipPlan> SponsorshipPlans { get; set; }
     }
 }

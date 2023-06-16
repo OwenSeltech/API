@@ -18,51 +18,22 @@ namespace API.Data
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(p => p.ProductId);
-
-                // Relationship with Customer
-                entity.HasOne<Customer>()
-                    .WithMany(c => c.Products)
-                    .HasForeignKey(p => p.ProductId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                
             });
 
             modelBuilder.Entity<CommunityProject>(entity =>
             {
-                entity.HasKey(p => p.ProjectId);
+                entity.HasKey(p => p.CommunityProjectId);
             });
 
             modelBuilder.Entity<SponsorshipPlan>(entity =>
             {
-                entity.HasKey(p => p.PlanId);
-
-                // Relationship with Customer
-                entity.HasOne<Customer>()
-                    .WithMany(c => c.SponsorshipPlans)
-                    .HasForeignKey(p => p.CustomerId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                // Relationship with Product
-                entity.HasOne<Product>()
-                    .WithMany()
-                    .HasForeignKey(p => p.ProductId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Relationship with CommunityProject
-                entity.HasOne<CommunityProject>()
-                    .WithMany()
-                    .HasForeignKey(p => p.ProjectId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasKey(p => p.SponsorshipPlanId);
             });
 
             modelBuilder.Entity<SponsorshipPayment>(entity =>
             {
-                entity.HasKey(p => p.PaymentId);
-
-                // Relationship with SponsorshipPlan
-                entity.HasOne<SponsorshipPlan>()
-                    .WithMany()
-                    .HasForeignKey(p => p.PlanId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasKey(p => p.SponsorshipPaymentId);
             });
         }
 

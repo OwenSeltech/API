@@ -11,14 +11,14 @@ namespace API.Extensions
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
 		{
-			//services.AddScoped<IProductService, ProductService>();
+			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICustomerService, CustomerService>();
-			//         services.AddScoped<IInvoiceService, InvoiceService>();
+			services.AddScoped<ICommunityProjectService, CommunityProjectService>();
 			//         services.AddScoped<IQuotationService, QuotationService>();
 			//         services.AddScoped<ICreditNoteService, CreditNoteService>();
-			//         services.AddScoped<IProductRepository, ProductRepository>();
+			services.AddScoped<IProductRepository, ProductRepository>();
 			services.AddScoped<ICustomerRepository, CustomerRepository>();
-			//         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+			services.AddScoped<ICommunityProjectRepository, CommunityProjectRepository>();
 			//         services.AddScoped<IQuotationRepository, QuotationRepository>();
 			//         services.AddScoped<ICreditNoteRepository, CreditNoteRepository>();
 

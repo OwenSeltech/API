@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230615162736_InitialMigration")]
+    [Migration("20230616150832_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.CommunityProject", b =>
                 {
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("CommunityProjectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommunityProjectId"));
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -58,7 +58,7 @@ namespace API.Data.Migrations
                     b.Property<decimal>("TotalFundsRequired")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ProjectId");
+                    b.HasKey("CommunityProjectId");
 
                     b.ToTable("CommunityProjects");
                 });
@@ -104,10 +104,16 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
                     b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -131,16 +137,18 @@ namespace API.Data.Migrations
 
                     b.HasKey("ProductId");
 
+                    b.HasIndex("CustomerId");
+
                     b.ToTable("Products");
                 });
 
             modelBuilder.Entity("API.Entities.SponsorshipPayment", b =>
                 {
-                    b.Property<int>("PaymentId")
+                    b.Property<int>("SponsorshipPaymentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SponsorshipPaymentId"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -154,26 +162,29 @@ namespace API.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PlanId")
+                    b.Property<int>("SponsorshipPlanId")
                         .HasColumnType("int");
 
-                    b.HasKey("PaymentId");
+                    b.HasKey("SponsorshipPaymentId");
 
-                    b.HasIndex("PlanId");
+                    b.HasIndex("SponsorshipPlanId");
 
                     b.ToTable("SponsorshipPayments");
                 });
 
             modelBuilder.Entity("API.Entities.SponsorshipPlan", b =>
                 {
-                    b.Property<int>("PlanId")
+                    b.Property<int>("SponsorshipPlanId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SponsorshipPlanId"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CommunityProjectId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -193,68 +204,68 @@ namespace API.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SourceOfFunds")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PlanId");
+                    b.HasKey("SponsorshipPlanId");
+
+                    b.HasIndex("CommunityProjectId");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("SponsorshipPlans");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
-                    b.HasOne("API.Entities.Customer", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("API.Entities.SponsorshipPayment", b =>
-                {
-                    b.HasOne("API.Entities.SponsorshipPlan", null)
+                    b.HasOne("API.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("API.Entities.SponsorshipPlan", b =>
-                {
-                    b.HasOne("API.Entities.Customer", null)
-                        .WithMany("SponsorshipPlans")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.CommunityProject", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("API.Entities.Customer", b =>
+            modelBuilder.Entity("API.Entities.SponsorshipPayment", b =>
                 {
-                    b.Navigation("Products");
+                    b.HasOne("API.Entities.SponsorshipPlan", "SponsorshipPlan")
+                        .WithMany()
+                        .HasForeignKey("SponsorshipPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("SponsorshipPlans");
+                    b.Navigation("SponsorshipPlan");
+                });
+
+            modelBuilder.Entity("API.Entities.SponsorshipPlan", b =>
+                {
+                    b.HasOne("API.Entities.CommunityProject", "CommunityProject")
+                        .WithMany()
+                        .HasForeignKey("CommunityProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommunityProject");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

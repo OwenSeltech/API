@@ -3,18 +3,19 @@
     public class Product
     {
         public int ProductId { get; set; }
-        public string Name { get; set; }
+        public int CustomerId { get; set; }
         public string ProductNumber{ get; set; }
-        public ProductType Type { get; set; }
+        public string ProductType  { get; set; }
         public decimal Balance { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsDeleted { get; set; } = false;
         public DateTime? DateDeleted { get; set; }
+        public Customer Customer { get; set; }
 
     }
-    public enum ProductType
+    public enum ProductTypeEnum
     {
-        Card,
-        Account
+        CARD,
+        ACCOUNT
     }
 }
