@@ -35,7 +35,18 @@ namespace API.Data.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
-        
+        public async Task<IEnumerable<SponsorshipPlan>> GetSponsorshipPlanByCustomerIdAsync(int id)
+        {
+            return await _context.SponsorshipPlans
+                .Where(x => x.CustomerId == id)
+                .Where(x => x.IsDeleted == false)
+                .Include(x => x.Customer)
+                .Include(x => x.Product)
+                .Include(x => x.CommunityProject)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public bool SponsorshipPlanExists(int projectId)
         {
             return _context.SponsorshipPlans.Any(o => o.CommunityProjectId == projectId);

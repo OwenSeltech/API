@@ -14,13 +14,13 @@ namespace API.Extensions
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICustomerService, CustomerService>();
 			services.AddScoped<ICommunityProjectService, CommunityProjectService>();
-			//         services.AddScoped<IQuotationService, QuotationService>();
-			//         services.AddScoped<ICreditNoteService, CreditNoteService>();
+			services.AddScoped<ISponsorshipPlanService, SponsorshipPlanService>();
+			services.AddScoped<ISponsorshipPaymentService, SponsorshipPaymentService>();
 			services.AddScoped<IProductRepository, ProductRepository>();
 			services.AddScoped<ICustomerRepository, CustomerRepository>();
 			services.AddScoped<ICommunityProjectRepository, CommunityProjectRepository>();
-			//         services.AddScoped<IQuotationRepository, QuotationRepository>();
-			//         services.AddScoped<ICreditNoteRepository, CreditNoteRepository>();
+			services.AddScoped<ISponsorshipPlanRepository, SponsorshipPlanRepository>();
+			services.AddScoped<ISponsorshipPaymentRepository, SponsorshipPaymentRepository>();
 
 			services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 			var connectionString = config.GetConnectionString("DefaultConnection");

@@ -20,6 +20,16 @@ namespace API.Helpers
                .ForMember(x => x.DateAdded, opt => opt.MapFrom(src => DateTime.Now));
             CreateMap<CommunityProjectUpdateRequestDto, CommunityProject>();
             CreateMap<CommunityProject, CommunityProjectResponseDto>();
+            CreateMap<SponsorshipPlanRequestDto, SponsorshipPlan>()
+                .ForMember(x => x.DateAdded, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(x => x.SourceOfFunds, opt => opt.MapFrom(src => src.SourceOfFunds.ToUpper()))
+                .ForMember(x => x.SponsorshipFrequency, opt => opt.MapFrom(src => src.SponsorshipFrequency.ToUpper())); 
+            CreateMap<SponsorshipPlanUpdateRequestDto, SponsorshipPlan>()
+                .ForMember(x => x.SourceOfFunds, opt => opt.MapFrom(src => src.SourceOfFunds.ToUpper()))
+                .ForMember(x => x.SponsorshipFrequency, opt => opt.MapFrom(src => src.SponsorshipFrequency.ToUpper()));
+            CreateMap<SponsorshipPaymentRequestDto, SponsorshipPayment>()
+               .ForMember(x => x.DateAdded, opt => opt.MapFrom(src => DateTime.Now));
+            CreateMap<SponsorshipPaymentUpdateRequestDto, SponsorshipPayment>();
         }
 	}
 }

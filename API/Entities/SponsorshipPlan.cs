@@ -17,10 +17,10 @@
         public Customer Customer { get; set; }
 
     }
-    public enum SponsorshipFrequency
+    public enum SponsorshipFrequencyEnum
     {
-        OnceOff,
-        Weekly,
-        Monthly
+        ONCEOFF,
+        WEEKLY,
+        MONTHLY
     }
 }

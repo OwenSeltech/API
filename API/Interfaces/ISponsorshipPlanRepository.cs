@@ -8,6 +8,7 @@ namespace API.Interfaces
         Task<bool> UpdateSponsorshipPlanAsync(SponsorshipPlan sponsorshipPlan);
         Task<IEnumerable<SponsorshipPlan>> GetAllSponsorshipPlansAsync();
         Task<SponsorshipPlan> GetSponsorshipPlanByIdAsync(int id);
+        Task<IEnumerable<SponsorshipPlan>> GetSponsorshipPlanByCustomerIdAsync(int id);
         public bool SponsorshipPlanExists(int projectId);
     }
 }
